@@ -18,7 +18,8 @@ export default (function() {
     }
 
     function stripHTML(message) {
-        return message.replace(/<br(.)*>/g, '\n').replace(/<(.)*>/g, '');
+        return message.replace(/<(?:.|\n)*?>/gm, '\n').replace(/&lt;/g,'').replace(/&gt;/g,'').replace(/&amp;/g,'').replace(/&nbsp;/g, '\s');
+        //return message.replace(/<br(.)*>/g, '\n').replace(/<(.)*>/g, '');
     }
 
     return {

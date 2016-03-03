@@ -6,7 +6,9 @@
 /* eslint no-use-before-define:0 */
 
 var _ = require("lodash");
-var debug = function () {}
+var debug = function (title, result) {
+  //console.log(title, result);
+};
 
 module.exports = {
   "extractSignature": extractSignature,
@@ -90,6 +92,8 @@ var RE_SIGNATURE = new RegExp(
       "^[-]{2,}" +
       "|" +
       "^[ \\t]*best[ a-z]*[\\s,!]*$" +
+      "|" +
+      "/^[a-z ,.'-]+$/i" +
       // added for French support
       "|" +
       "^[ \\t]*merci[\\s,!]*$" +
@@ -102,6 +106,8 @@ var RE_SIGNATURE = new RegExp(
       "|" +
       "^[ \\t]*(?:veuillez recevoir|je vous prie)?.*(?:mes\\s+)?salutations[ a-zé,]*[\\s,!]*$" +
       "^we want to hear from you." +
+      "|" +
+      "\S+@\S+" +
     ")" +
     ".*" +
   ")",
@@ -123,11 +129,15 @@ var RE_PHONE_SIGNATURE = new RegExp(
       // added French support
       "|" +
       "^envoyé\\sdepuis.*$" +
+      "|" +
+      "^M:." +
     ")" +
     ".*" +
   ")",
   "im"
 );
+
+var RE_NAME = /^([A-Z][a-z]*)[\s-]([A-Z][a-z]*)$/m;
 
 
 // see _mark_candidate_indexes() for details
@@ -174,6 +184,14 @@ function extractSignature (msgBody) {
       strippedBody = strippedBody.substring(0, match.index);
     }
     debug("phoneSignature", JSON.stringify(phoneSignature));
+
+    var matchInitials = strippedBody.match(RE_NAME);
+    var initialsSignature = null;
+
+    if (matchInitials) {
+      initialsSignature = strippedBody.replace(/(\r\n|\n|\r)/gm,"").substring(matchInitials.index);
+      strippedBody = strippedBody.substring(0, matchInitials.index);
+    }
 
     // decide on signature candidate
     var lines = strippedBody.split(delimiter);

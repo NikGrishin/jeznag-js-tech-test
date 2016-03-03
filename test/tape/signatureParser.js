@@ -1,7 +1,21 @@
 import {test} from 'tape';
+import * as fs from 'fs';
 import emailParseUtil from '../../js/utils/emailParseUtil.js';
 
 console.log(emailParseUtil);
+
+function printToFile(actual, expected, file_marker) {
+    fs.mkdir('output', (error) => {
+        if(error && error.code !== 'EEXIST') throw error;
+
+        fs.writeFile(('output/').concat(file_marker, 'expected.html'), expected, (error) => {
+            if(error) throw error;
+        });
+        fs.writeFile(('output/').concat(file_marker, 'actual.html'), actual, (error) => {
+            if(error) throw error;
+        });
+    });
+}
 
 (function () {
     'use strict';
@@ -93,8 +107,12 @@ console.log(emailParseUtil);
     </blockquote></div>
     </div></div></blockquote></div><br></div></div></div>
     </blockquote></div><br></div></td>`;
+
         const expectedOutput = 'Can you advise whether this has been done?';
         let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+
+        //printToFile(actualOutput, expectedOutput, 'zoho_');
+
         expect.equal(actualOutput, expectedOutput);
         expect.end();
     });
@@ -167,6 +185,7 @@ Copyright © 2015 Search Results Specialists Pty Ltd. All Rights Reserved.
 The information contained in this e-mail is private and confidential and only intended to the recipient of this email.  Search Results have, in preparing this information used our best endeavours to ensure that the information contained therein is true and accurate, but accept no responsibility and disclaim all liability in respect of any errors, inaccuracies or misstatements contained herein. All parties interested in any Search Results product and /or service should make their own inquiries to verify the information contained herein. If you are not the intended recipient, you may not disclose or use the information in this e-mail in any way.  Search Results does not guarantee the integrity of any e-mails or attached files. The views or opinions expressed are the author's own and may not reflect the views or opinions of Search Results Specialists Pty Ltd. Search Results Specialists Pty Ltd is an independent service company that has no association or affiliation with Google. Google, AdWords and Google Places are registered or unregistered trademarks, and are the property of, Google Inc. or related entity.`;
         const expectedOutput = 'Hi Cherie,\n \nAccess to our website is below.\n \n\n\n\n \n \nThank you.';
         let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+        //printToFile(actualOutput, expectedOutput, 'cherie_');
         expect.equal(actualOutput, expectedOutput);
         expect.end();
     });
@@ -209,6 +228,8 @@ I'm not sure. Have contacted NuOrder for details about the API
 *Does it talk to Mailchimp, so we can send out newsletters to specific buyers by brand?
 Yes. You can also use Zoho Campaigns which does the same thing and has better integration.`;
         let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+
+        //printToFile(actualOutput, expectedOutput, 'simone_');
         expect.equal(actualOutput, expectedOutput);
         expect.end();
     });
@@ -1082,6 +1103,7 @@ Your ITSM Partner for – Zoho CRM |Business Intelligence |Project |Survey
 |SMS/Email Marketing`;
         const expectedOutput = 'Dear *Jeremy*,\n\n\n\nThanks for assistance.\n\n\n\nThe meeting was good day on the demo. Client seems OK with all points\nexcept booking chart.\n\nDuring Zoho Reports demo they found a chart view (as attached with\namendments here), which they like to use for their booking chart.\n\nI would request you, if you could share the possibility of achieving it and\ncould be integrated with Zoho CRM, Creator, Reports.\n\nI am just looking for your understating if it possible with investment\noutline. I have mentioned some of the required points below –\n\n\n\n·         The booking chart should auto update instantly, when the location\nbooking is approved in CRM.\n\n·         Prior to booking when under approval, it should reflect in the\nCRM too as mentioned in the image.\n\n·         It should be interactive enough with ease of understating for all\nviewers.\n\n·         When a portion of status is hovered over, it should give basic\ndetails about that (Client, Start Date, End Date, Agency/ Direct etc.)\n\n·         The chart would be based on locations not on the calendar or\ndate, the mean here is, all locations will remain listed intact and can be\nfurther filtered with other sub related details. (Status, Agencies,\nLocations, Start/End Date, Status etc.).\n\n·         Each location has a unique code, while hovering over to, it\nshould give details of it.\n\n·         The page view should give monthly view as default which could be\ncustomised based on weeks.\n\n·         The chart should reflect the locations which are upcoming\navailable with differentiation. like before 7 days or so.. The CRM should\nalso send email to CRM user for this so they concentrate for new potentials.\n\n·         A limited view access is to be given to some agencies based on\ntheir relation with specific locations only.\n\n\n\nMore, they do also have a question about Account Management, would we be\nable to handle a situation while two CRM users approach one client for\ndifferent services without having to look each other’s job on that.\n\nMeanwhile, the admin or someone as manager can see overall on that\nparticular account. I was thinking it to be with Parent / Child relation.\n\nAm I right on this, or what is your view?\n\n\n\nLooking for your feedback.\n\n\n\n*--*\n\n*';
         let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+        //printToFile(actualOutput, expectedOutput, 'muhhamad_');
         expect.equal(actualOutput, expectedOutput);
         expect.end();
     });
